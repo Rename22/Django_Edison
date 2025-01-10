@@ -1,0 +1,267 @@
+{% extends "./plantilla.html" %}
+
+{% block contenido %}
+<style>
+    /* Fuente general */
+    body {
+        font-family: 'Algerian', serif;
+    }
+
+    /* Estilo general para las etiquetas */
+    .form-label {
+        font-weight: bold;
+        font-size: 1.2em;
+        color: #00ff00; /* Verde puro */
+    }
+
+    /* Estilo para los campos del formulario */
+    .form-control {
+        border: 2px solid #66cdaa; /* Aguamarina claro */
+        border-radius: 8px;
+        padding: 10px;
+        font-size: 1em;
+    }
+
+    /* Cambios al enfocar un campo */
+    .form-control:focus {
+        border-color: #20b2aa; /* Aguamarina */
+        box-shadow: 0 0 5px rgba(32, 178, 170, 0.5);
+    }
+
+    /* Estilo para los mensajes de validación */
+    .invalid-feedback {
+        font-size: 0.9em;
+        color: #d32f2f; /* Rojo para mensajes de error */
+    }
+
+    /* Botones */
+    .btn-primary {
+        background-color: #20b2aa; /* Aguamarina */
+        border: none;
+        font-size: 1.1em;
+        padding: 10px 20px;
+        border-radius: 5px;
+    }
+
+    .btn-primary:hover {
+        background-color: #66cdaa; /* Aguamarina claro */
+    }
+
+    .btn-danger {
+        background-color: #d32f2f; /* Rojo */
+        border: none;
+        font-size: 1.1em;
+        padding: 10px 20px;
+        border-radius: 5px;
+    }
+
+    .btn-danger:hover {
+        background-color: #b71c1c; /* Rojo más oscuro */
+    }
+
+    /* Estilo para el título */
+    h3 {
+        color: #ff4500; /* Rojo naranja */
+        font-size: 2em;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    /* Fondo y bordes del contenedor */
+    .border {
+        background-color: #ffffff; /* Blanco */
+        border-color: #66cdaa; /* Aguamarina claro */
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<link href="https://fonts.googleapis.com/css2?family=Algerian&display=swap" rel="stylesheet">
+
+<div class="container mt-5">
+    <!-- Contenedor con borde y sombra para el formulario -->
+    <div class="border p-4 rounded-3 shadow-lg">
+        <h3 class="mb-4 text-center">Realizar Reserva</h3>
+        
+        <!-- Contenedor para mostrar alertas -->
+        <div id="alertas" class="mb-3"></div>
+        
+        <form id="formReserva" action="/guardarreserva/" method="post" novalidate>
+            {% csrf_token %}
+
+            <!-- Nombre del Campista -->
+            <div class="mb-3">
+                <label for="campista" class="form-label"><b>Campista:</b></label>
+                <select name="campista" id="campista" class="form-control" required>
+                    <option value="">Selecciona un campista</option>
+                    {% for campista in campistas %}
+                        <option value="{{ campista.id }}">{{ campista.nombre_completo }}</option>
+                    {% endfor %}
+                </select>
+                <div class="invalid-feedback">
+                    Elige un campista para la reserva.
+                </div>
+            </div>
+
+            <!-- Fecha de Inicio -->
+            <div class="mb-3">
+                <label for="fecha_inicio" class="form-label"><b>Fecha de Inicio:</b></label>
+                <input 
+                    type="date" 
+                    name="fecha_inicio" 
+                    id="fecha_inicio" 
+                    class="form-control" 
+                    required
+                >
+                <div class="invalid-feedback">
+                    La fecha de inicio es obligatoria.
+                </div>
+            </div>
+
+            <!-- Fecha de Fin -->
+            <div class="mb-3">
+                <label for="fecha_fin" class="form-label"><b>Fecha de Fin:</b></label>
+                <input 
+                    type="date" 
+                    name="fecha_fin" 
+                    id="fecha_fin" 
+                    class="form-control" 
+                    required
+                >
+                <div class="invalid-feedback">
+                    La fecha de fin es obligatoria.
+                </div>
+            </div>
+
+            <!-- Tipo de Alojamiento -->
+            <div class="mb-3">
+                <label for="tipo_alojamiento" class="form-label"><b>Tipo de Alojamiento:</b></label>
+                <select name="tipo_alojamiento" id="tipo_alojamiento" class="form-control" required>
+                    <option value="">Selecciona un tipo de alojamiento</option>
+                    <option value="Tienda">Tienda</option>
+                    <option value="Cabaña">Cabaña</option>
+                    <option value="Caravana">Caravana</option>
+                </select>
+                <div class="invalid-feedback">
+                    Elige el tipo de alojamiento.
+                </div>
+            </div>
+
+            <!-- Número de Personas -->
+            <div class="mb-3">
+                <label for="numero_personas" class="form-label"><b>Número de Personas:</b></label>
+                <input 
+                    type="number" 
+                    name="numero_personas" 
+                    id="numero_personas" 
+                    class="form-control" 
+                    required
+                    min="1"
+                >
+                <div class="invalid-feedback">
+                    El número de personas es obligatorio y debe ser mayor que 0.
+                </div>
+            </div>
+
+            <!-- Estado de la Reserva -->
+            <div class="mb-3">
+                <label for="estado" class="form-label"><b>Estado:</b></label>
+                <select name="estado" id="estado" class="form-control" required>
+                    <option value="Confirmada">Confirmada</option>
+                    <option value="Pendiente">Pendiente</option>
+                    <option value="Cancelada">Cancelada</option>
+                </select>
+                <div class="invalid-feedback">
+                    Elige el estado de la reserva.
+                </div>
+            </div>
+
+            <!-- Observaciones -->
+            <div class="mb-3">
+                <label for="observaciones" class="form-label"><b>Observaciones:</b></label>
+                <textarea 
+                    name="observaciones" 
+                    id="observaciones" 
+                    class="form-control" 
+                    rows="5"
+                ></textarea>
+                <div class="invalid-feedback">
+                    Las observaciones son opcionales.
+                </div>
+            </div>
+
+            <!-- Botones -->
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary me-2">Guardar</button>
+                <a href="/listadoreserva/" class="btn btn-danger">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const form = document.getElementById("formReserva");
+        const alertas = document.getElementById("alertas");
+
+        form.addEventListener("submit", (event) => {
+            alertas.innerHTML = ""; // Limpiar alertas previas
+            let esValido = true;
+
+            // Limpiar las clases previas de error
+            const fields = form.querySelectorAll(".form-control");
+            fields.forEach(field => {
+                field.classList.remove("is-invalid");
+            });
+
+            // Validar campista
+            const campista = form.campista;
+            if (!campista.value) {
+                esValido = false;
+                campista.classList.add("is-invalid");
+            }
+
+            // Validar fecha de inicio
+            const fecha_inicio = form.fecha_inicio;
+            if (!fecha_inicio.value) {
+                esValido = false;
+                fecha_inicio.classList.add("is-invalid");
+            }
+
+            // Validar fecha de fin
+            const fecha_fin = form.fecha_fin;
+            if (!fecha_fin.value) {
+                esValido = false;
+                fecha_fin.classList.add("is-invalid");
+            }
+
+            // Validar tipo de alojamiento
+            const tipo_alojamiento = form.tipo_alojamiento;
+            if (!tipo_alojamiento.value) {
+                esValido = false;
+                tipo_alojamiento.classList.add("is-invalid");
+            }
+
+            // Validar número de personas
+            const numero_personas = form.numero_personas;
+            if (!numero_personas.value || numero_personas.value < 1) {
+                esValido = false;
+                numero_personas.classList.add("is-invalid");
+            }
+
+            // Validar estado
+            const estado = form.estado;
+            if (!estado.value) {
+                esValido = false;
+                estado.classList.add("is-invalid");
+            }
+
+            // Detener el envío si hay errores
+            if (!esValido) {
+                event.preventDefault();
+            }
+        });
+    });
+</script>
+
+{% endblock %}
+

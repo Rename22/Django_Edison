@@ -1,0 +1,98 @@
+{% extends "./plantilla.html" %}
+
+{% block contenido %}
+<div class="container mt-5" style="font-family: Algerian; color: #00ff00;">
+    <!-- Contenedor con borde y sombra para el formulario -->
+    <div class="border p-4 rounded-3 shadow-lg">
+        <h3 class="mb-4 text-center" style="color: #ff4500;">Actualizar Reserva</h3>
+        <form action="/procesarEdicionreserva/" id="frm_editar_reserva" method="post" onsubmit="return validarFormulario()">
+            {% csrf_token %}
+
+            <!-- Campo oculto para el ID -->
+            <div class="mb-3">
+                <label for="id" class="form-label"><b>ID:</b></label>
+                <input type="hidden" name="id" value="{{ reserva.id }}">
+                <input type="text" class="form-control" id="id" value="{{ reserva.id }}" readonly>
+            </div>
+
+            <!-- Campista -->
+            <div class="mb-3">
+                <label for="campista" class="form-label"><b>Campista:</b></label>
+                <input type="text" name="campista" id="campista" class="form-control" value="{{ reserva.campista.nombre_completo }}" readonly>
+            </div>
+
+            <!-- Fecha de inicio -->
+            <div class="mb-3">
+                <label for="fecha_inicio" class="form-label"><b>Fecha de Inicio:</b></label>
+                <input type="date" name="fecha_inicio" id="fecha_inicio" class="form-control" value="{{ reserva.fecha_inicio }}">
+            </div>
+
+            <!-- Fecha de fin -->
+            <div class="mb-3">
+                <label for="fecha_fin" class="form-label"><b>Fecha de Fin:</b></label>
+                <input type="date" name="fecha_fin" id="fecha_fin" class="form-control" value="{{ reserva.fecha_fin }}">
+            </div>
+
+            <!-- Tipo de alojamiento -->
+            <div class="mb-3">
+                <label for="tipo_alojamiento" class="form-label"><b>Tipo de Alojamiento:</b></label>
+                <select name="tipo_alojamiento" id="tipo_alojamiento" class="form-select">
+                    <option value="Tienda" {% if reserva.tipo_alojamiento == 'Tienda' %}selected{% endif %}>Tienda</option>
+                    <option value="Cabaña" {% if reserva.tipo_alojamiento == 'Cabaña' %}selected{% endif %}>Cabaña</option>
+                    <option value="Caravana" {% if reserva.tipo_alojamiento == 'Caravana' %}selected{% endif %}>Caravana</option>
+                </select>
+            </div>
+
+            <!-- Número de personas -->
+            <div class="mb-3">
+                <label for="numero_personas" class="form-label"><b>Número de Personas:</b></label>
+                <input type="number" name="numero_personas" id="numero_personas" class="form-control" value="{{ reserva.numero_personas }}">
+            </div>
+
+            <!-- Estado -->
+            <div class="mb-3">
+                <label for="estado" class="form-label"><b>Estado:</b></label>
+                <select name="estado" id="estado" class="form-select">
+                    <option value="Confirmada" {% if reserva.estado == 'Confirmada' %}selected{% endif %}>Confirmada</option>
+                    <option value="Pendiente" {% if reserva.estado == 'Pendiente' %}selected{% endif %}>Pendiente</option>
+                    <option value="Cancelada" {% if reserva.estado == 'Cancelada' %}selected{% endif %}>Cancelada</option>
+                </select>
+            </div>
+
+            <!-- Observaciones -->
+            <div class="mb-3">
+                <label for="observaciones" class="form-label"><b>Observaciones:</b></label>
+                <textarea name="observaciones" id="observaciones" class="form-control" rows="5">{{ reserva.observaciones }}</textarea>
+            </div>
+
+            <!-- Botones -->
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-warning me-2">Editar</button>
+                <a href="/listadoreserva/" class="btn btn-danger">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function validarFormulario() {
+        // Verificar si algún campo está vacío
+        var fechaInicio = document.getElementById('fecha_inicio').value;
+        var fechaFin = document.getElementById('fecha_fin').value;
+        var tipoAlojamiento = document.getElementById('tipo_alojamiento').value;
+        var numeroPersonas = document.getElementById('numero_personas').value;
+        var estado = document.getElementById('estado').value;
+        var observaciones = document.getElementById('observaciones').value;
+
+        // Si alguno de los campos está vacío, muestra un mensaje de alerta
+        if (fechaInicio === '' || fechaFin === '' || tipoAlojamiento === '' || numeroPersonas === '' || estado === '' || observaciones === '') {
+            alert('Por favor, complete todos los campos antes de guardar.');
+            return false; // Evita el envío del formulario
+        }
+
+        // Si todo está completo, permite el envío del formulario
+        return true;
+    }
+</script>
+
+{% endblock %}

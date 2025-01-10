@@ -1,0 +1,136 @@
+{% extends "./plantilla.html" %}
+
+{% block contenido %}
+<div class="container mt-5">
+    <!-- Contenedor con borde y sombra para el formulario -->
+    <div class="border p-4 rounded-3 shadow-lg">
+        <h3 class="mb-4 text-center" style="color: #FF4500; font-family: 'Algerian', sans-serif;">Registrar Nuevo Campista</h3>
+        
+        <!-- Contenedor para mostrar alertas -->
+        <div id="alertas" class="mb-3"></div>
+        
+        <form id="formCampista" action="/guardarcampesino/" method="post" novalidate>
+            {% csrf_token %}
+
+            <!-- Nombre Completo -->
+            <div class="mb-3">
+                <label for="nombre_completo" class="form-label" style="color: #008000; font-family: 'Algerian', sans-serif;"><b>Nombre Completo:</b></label>
+                <input 
+                    type="text" 
+                    name="nombre_completo" 
+                    id="nombre_completo" 
+                    class="form-control" 
+                    required 
+                    minlength="4" 
+                    maxlength="200"
+                    style="border: 2px solid #008000; border-radius: 8px; font-family: 'Algerian', sans-serif;"
+                >
+                <div class="invalid-feedback" style="color: #FF6347; font-family: 'Algerian', sans-serif;">
+                    El nombre completo es obligatorio y debe tener entre 4 y 200 caracteres.
+                </div>
+            </div>
+
+            <!-- Correo Electrónico -->
+            <div class="mb-3">
+                <label for="correo_electronico" class="form-label" style="color: #008000; font-family: 'Algerian', sans-serif;"><b>Correo Electrónico:</b></label>
+                <input 
+                    type="email" 
+                    name="correo_electronico" 
+                    id="correo_electronico" 
+                    class="form-control" 
+                    required
+                    style="border: 2px solid #008000; border-radius: 8px; font-family: 'Algerian', sans-serif;"
+                >
+                <div class="invalid-feedback" style="color: #FF6347; font-family: 'Algerian', sans-serif;">
+                    El correo electrónico es obligatorio y debe ser válido.
+                </div>
+            </div>
+
+            <!-- Teléfono -->
+            <div class="mb-3">
+                <label for="telefono" class="form-label" style="color: #008000; font-family: 'Algerian', sans-serif;"><b>Teléfono:</b></label>
+                <input 
+                    type="tel" 
+                    name="telefono" 
+                    id="telefono" 
+                    class="form-control" 
+                    required 
+                    minlength="10" 
+                    maxlength="20"
+                    style="border: 2px solid #008000; border-radius: 8px; font-family: 'Algerian', sans-serif;"
+                >
+                <div class="invalid-feedback" style="color: #FF6347; font-family: 'Algerian', sans-serif;">
+                    El teléfono es obligatorio y debe tener entre 10 y 20 caracteres.
+                </div>
+            </div>
+
+            <!-- Dirección -->
+            <div class="mb-3">
+                <label for="direccion" class="form-label" style="color: #008000; font-family: 'Algerian', sans-serif;"><b>Dirección:</b></label>
+                <textarea 
+                    name="direccion" 
+                    id="direccion" 
+                    class="form-control" 
+                    rows="4" 
+                    placeholder="Dirección (opcional)"
+                    style="border: 2px solid #008000; border-radius: 8px; font-family: 'Algerian', sans-serif;"
+                ></textarea>
+                <div class="invalid-feedback" style="color: #FF6347; font-family: 'Algerian', sans-serif;">
+                    La dirección es opcional.
+                </div>
+            </div>
+
+            <!-- Botones -->
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn" style="background-color: #008000; color: white; border-radius: 5px; font-family: 'Algerian', sans-serif;">Guardar</button>
+                <a href="/listadocampesino/" class="btn" style="background-color: #FF6347; color: white; border-radius: 5px; font-family: 'Algerian', sans-serif;">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const form = document.getElementById("formCampista");
+        const alertas = document.getElementById("alertas");
+
+        form.addEventListener("submit", (event) => {
+            alertas.innerHTML = ""; // Limpiar alertas previas
+            let esValido = true;
+
+            // Limpiar las clases previas de error
+            const fields = form.querySelectorAll(".form-control");
+            fields.forEach(field => {
+                field.classList.remove("is-invalid");
+            });
+
+            // Validar nombre completo
+            const nombre_completo = form.nombre_completo;
+            if (!nombre_completo.value || nombre_completo.value.length < 4 || nombre_completo.value.length > 200) {
+                esValido = false;
+                nombre_completo.classList.add("is-invalid");
+            }
+
+            // Validar correo electrónico
+            const correo_electronico = form.correo_electronico;
+            if (!correo_electronico.value || !/\S+@\S+\.\S+/.test(correo_electronico.value)) {
+                esValido = false;
+                correo_electronico.classList.add("is-invalid");
+            }
+
+            // Validar teléfono
+            const telefono = form.telefono;
+            if (!telefono.value || telefono.value.length < 10 || telefono.value.length > 20) {
+                esValido = false;
+                telefono.classList.add("is-invalid");
+            }
+
+            // Detener el envío si hay errores
+            if (!esValido) {
+                event.preventDefault();
+            }
+        });
+    });
+</script>
+
+{% endblock %}

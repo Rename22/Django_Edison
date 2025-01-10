@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Reservas</title>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css" integrity="sha512-DIW4FkYTOxjCqRt7oS9BFO+nVOwDL4bzukDyDtMO7crj0UZhwpyrWBFroq+IqRe6VnJkTpRAS6nhDvf0w+wHmxg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js" integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>
+
+  <style>
+    /* Estilos generales */
+    body {
+      background-color: #f4f4f9;
+      font-family: 'Algerian', serif;
+    }
+    .navbar {
+      background-color: #4caf50;
+    }
+    .navbar-brand {
+      font-weight: bold;
+      color: #ffffff;
+      font-size: 1.8em;
+    }
+    .navbar-nav .nav-item .nav-link {
+      color: #ffffff;
+      font-size: 1.1em;
+    }
+    .navbar-nav .nav-item .nav-link:hover {
+      color: #f1f1f1;
+    }
+    header {
+      background-color: #388e3c;
+      color: #ffffff;
+      padding: 40px 0;
+    }
+    .titulo {
+      font-size: 3.5em;
+      font-weight: bold;
+      color: #f7f7f7;
+      text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+      letter-spacing: 2px;
+      font-family: 'Georgia', serif;
+    }
+    .subtitulo {
+      font-size: 1.5em;
+      color: #c8e6c9;
+      font-style: italic;
+      margin-top: 10px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    header img {
+      max-width: 150px;
+      height: auto;
+      margin-bottom: 20px;
+    }
+    .dropdown-menu {
+      background-color: #81c784;
+    }
+    .dropdown-menu .dropdown-item {
+      color: white;
+    }
+    .dropdown-menu .dropdown-item:hover {
+      background-color: #a5d6a7;
+    }
+    .footer {
+      background-color: #2e7d32;
+      color: white;
+      text-align: center;
+      padding: 25px 0;
+    }
+    .footer a {
+      color: #f7f7f7;
+      text-decoration: none;
+    }
+    .footer a:hover {
+      text-decoration: underline;
+    }
+    .container-fluid {
+      margin-top: 30px;
+    }
+    .content-section {
+      background-color: #ffffff;
+      padding: 40px 0;
+      text-align: center;
+    }
+  </style>
+
+  <link href="https://fonts.googleapis.com/css2?family=Algerian&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="row align-items-center justify-content-center">
+            <div class="col-md-3">
+                <img src="https://png.pngtree.com/png-vector/20240327/ourmid/pngtree-hiking-tent-camp-cartoon-png-image_12225377.png" alt="Logo Camping" class="img-fluid rounded-circle">
+            </div>
+            <div class="col-md-8 text-center">
+                <h1 class="titulo">Sistema de Reservas de Camping</h1>
+                <p class="subtitulo">Tu Aventura Comienza Aquí</p>
+            </div>
+        </div>
+    </header>
+
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Inicio</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Campistas
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/listadocampesino/">Listado de Campistas</a></li>
+                            <li><a class="dropdown-item" href="/nuevocampesino/">Agregar Campista</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Reservas
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/listadoreserva/">Listado de Reservas</a></li>
+                            <li><a class="dropdown-item" href="/nuevoreserva/">Agregar Reserva</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid content-section">
+        {% block contenido %}
+        {% endblock %}
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2025 Sistema de Reservas de Camping. Todos los derechos reservados.</p>
+        <a href="#">Política de Privacidad</a> | <a href="#">Términos y Condiciones</a>
+    </footer>
+    <footer class="footer">
+        <div class="row">
+            <div class="col-md-4">
+                <p>EDDY PALLO ; 2025 Sistema de Reservas de Camping. Todos los derechos reservados.</p>
+                <p><strong>La mayor selección:</strong> Con más de 3000 campings disponibles</p>
+                <p><strong>Precios exclusivos:</strong> Desde 99€ a la semana</p>
+                <p><strong>Especialistas en camping:</strong> Ofrecemos facilidades de pago</p>
+                <p><strong>Facilidades de pago:</strong> Pagas hasta 3 cuotas sin interés</p>
+                <p><strong>Pago 100% seguro:</strong> Con tarjeta bancaria, PayPal, etc.</p>
+            </div>
+    
+            <div class="col-md-4">
+                <p><strong>Campings.com y tú:</strong></p>
+                <p><a href="#">Ayuda</a> | <a href="#">Unirse</a> | <a href="#">Trabajo</a> | <a href="#">Directorio de campings</a></p>
+                <p><a href="#">Gestión de las cookies</a> | <a href="#">Acerca de Campings.com</a></p>
+                <p><a href="#">Condiciones Generales de Venta</a> | <a href="#">Menciones legales</a> | <a href="#">Seguro de cancelación</a> | <a href="#">Registra tu camping</a></p>
+            </div>
+    
+            <div class="col-md-4">
+                <p><strong>Campings en Ecuador:</strong></p>
+                <p><a href="#">Camping España</a> | <a href="#">Camping Francia</a> | <a href="#">Camping Portugal</a> | <a href="#">Camping Italia</a> | <a href="#">Camping Croacia</a></p>
+    
+                <div>
+                    <p><strong>Síguenos:</strong></p>
+                    <a href="https://www.facebook.com/groups/1162182618067846/" target="_blank" class="btn btn-primary mb-2">Facebook</a>
+                    <a href="https://www.instagram.com/campyng.oficial/" target="_blank" class="btn btn-primary mb-2">Instagram</a>
+                </div>
+    
+                <p><strong>Ubicación:</strong> Calle San Felipe, Latacunga, Ecuador</p>
+            </div>
+        </div>
+    </footer>
+    
+    
+    
+</body>
+</html>

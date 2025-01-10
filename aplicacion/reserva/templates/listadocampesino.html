@@ -1,0 +1,38 @@
+{% extends "./plantilla.html" %}
+
+{% block contenido %}
+<div class="container mt-5">
+    <!-- Contenedor para la tabla -->
+    <div class="border p-4 rounded-3 shadow-lg">
+        <h3 class="mb-4 text-center" style="color: #FF4500; font-family: 'Algerian', sans-serif;">Lista de Campesino</h3>
+        <table class="table table-bordered table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th style="color: #008000; font-family: 'Algerian', sans-serif;">ID</th>
+                    <th style="color: #008000; font-family: 'Algerian', sans-serif;">Nombre Completo</th>
+                    <th style="color: #008000; font-family: 'Algerian', sans-serif;">Correo Electrónico</th>
+                    <th style="color: #008000; font-family: 'Algerian', sans-serif;">Teléfono</th>
+                    <th style="color: #008000; font-family: 'Algerian', sans-serif;">Dirección</th>
+                    <th style="color: #008000; font-family: 'Algerian', sans-serif;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for campista in campistas %}
+                    <tr>
+                        <td style="font-family: 'Algerian', sans-serif;">{{ campista.id }}</td>
+                        <td style="font-family: 'Algerian', sans-serif;">{{ campista.nombre_completo }}</td>
+                        <td style="font-family: 'Algerian', sans-serif;">{{ campista.correo_electronico }}</td>
+                        <td style="font-family: 'Algerian', sans-serif;">{{ campista.telefono }}</td>
+                        <td style="font-family: 'Algerian', sans-serif;">{{ campista.direccion|default:"No especificada" }}</td>
+                        <td>
+                            <a href="/editarcampesino/{{ campista.id }}" class="btn" style="background-color: #FF6347; color: white; font-family: 'Algerian', sans-serif;">Editar</a>
+                            <a onclick="return confirm('¿Está seguro de eliminar permanentemente?')" href="/eliminarcampesino/{{ campista.id }}" class="btn" style="background-color: #008000; color: white; font-family: 'Algerian', sans-serif;">Eliminar</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
